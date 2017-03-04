@@ -6,8 +6,8 @@
 #'
 #' @param exprData The local fully qualified filename of the gene expression data RDS file.
 #' @param clinData The local fully qualified filename of the clinical data RDS file.
-#' @param fNames A vector of local, fully-qualified filenames of rMUT and/or rCNA RDS files.
-#' @param dOut The local, fully-qualified path of a directory to store the output rMUT and/or rCNA RDS files.
+#' @param fNames A vector of local, fully-qualified filenames of rSNV and/or rCNA RDS files.
+#' @param dOut The local, fully-qualified path of a directory to store the output rSNV and/or rCNA RDS files.
 #' @param rT Threshold: only samples with numReads < rT are retained in the output.
 #' @param pT Threshold: only samples with numSampleReads < (pT * number of samples) are retained in the output.
 #' @param cT Threshold: only samples with "days_to_death_or_fup" < cT are retained in the output.
@@ -318,35 +318,35 @@
     return(readhash)
 }
 
-# Scan an rMUT MAF file, outputting into the output directory a new MAF
+# Scan an rSNV MAF file, outputting into the output directory a new MAF
 #   file that has only the records for which the filter says not to ignore
-.filter.unimportant_genes.processrMUT <- function(filename, dOut, filter) {
+.filter.unimportant_genes.processrSNV <- function(filename, dOut, filter) {
     outName <- .filter.unimportant_genes.outputFilename(dOut, filename)
 
-    rMUT <- file(filename, open="r")
-    MUT <- file(outName, open="w")
+    rSNV <- file(filename, open="r")
+    SNV <- file(outName, open="w")
 
     # Duplicate the header
     hasHeader <- FALSE
-    line <- readLines(con=rMUT, n=1)
+    line <- readLines(con=rSNV, n=1)
     while (length(line) != 0) {
         if (!startsWith(line[[1]], "#")) {
             break
         }
         hasHeader <- TRUE
-        writeLines(line, con=MUT)
-        line <- readLines(con=rMUT, n=1)
+        writeLines(line, con=SNV)
+        line <- readLines(con=rSNV, n=1)
     }
    
     if (!hasHeader) {
-        stop("Malformed rMUT file: missing header")
+        stop("Malformed rSNV file: missing header")
     }
  
     # Filter the data
     while (length(line) != 0) {
         fields <- strsplit(line[[1]], "\t", fixed=TRUE)[[1]]
         if (length(fields) != 12) {
-            stop("Malformed rMUT file: incorrect field count")
+            stop("Malformed rSNV file: incorrect field count")
         }
 
         # RDS converts the "-" in the barcodes to "."
@@ -354,15 +354,15 @@
             gsub('-', '.', fields[11])), collapse="|")
         if (exists(record, envir=filter) &&
             filter[[record]]$ignore == TRUE) {
-            line <- readLines(con=rMUT, n=1)
+            line <- readLines(con=rSNV, n=1)
             next
         }
-        writeLines(line, con=MUT)
-        line <- readLines(con=rMUT, n=1)
+        writeLines(line, con=SNV)
+        line <- readLines(con=rSNV, n=1)
     }
 
-    close(MUT)
-    close(rMUT)
+    close(SNV)
+    close(rSNV)
 
     return(outName)
 }
@@ -421,11 +421,11 @@ filter.unimportant_genes <- function(exprData, clinData, fNames, dOut,
         readhash, expression, survivalTime, rT, pT, cT)
     # expression is now an environment hash
 
-    # Process rMUT and rCNA files
+    # Process rSNV and rCNA files
     for (filename in toFilter) {
         fType <- .filter.unimportant_genes.getMagic(filename)
         if (fType  == 'MAF') {
-            rMUT <- .filter.unimportant_genes.processrMUT(
+            rSNV <- .filter.unimportant_genes.processrSNV(
                 filename, dOut, expression)
         } else {
             rCNA <- .filter.unimportant_genes.processrCNA(

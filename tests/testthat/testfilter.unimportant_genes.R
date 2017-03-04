@@ -337,7 +337,7 @@ test_that("Filtering expression data", {
 
 })
 
-test_that("Processing an rMUT MAF file", {
+test_that("Processing an rSNV MAF file", {
     dOut <- tempfile()
     dir.create(dOut)
     expect_true(dir.exists(dOut), info="Test setup (dOut)")
@@ -357,7 +357,7 @@ test_that("Processing an rMUT MAF file", {
             "A", "T", "G", "TCGA-A3-0001-124-01W-0615-10", 
             "7719241D-B6C8-4B13-80F6-3047C8BBFE1F"), collapse="\t"))
     writeLines(rMutData, con=rMutName)
-    expect_true(file.exists(rMutName), info="Test setup (rMUT)")
+    expect_true(file.exists(rMutName), info="Test setup (rSNV)")
     
     filter <- new.env(hash=TRUE)
     filter[["HFE|TCGA.A3.0001.123.01W.0615.10"]] <-
@@ -365,7 +365,7 @@ test_that("Processing an rMUT MAF file", {
     filter[["HFE|TCGA.A3.0001.124.01W.0615.10"]] <-
         list(ignore=FALSE, numReads=5)
 
-    output <- .filter.unimportant_genes.processrMUT(rMutName, dOut, filter)
+    output <- .filter.unimportant_genes.processrSNV(rMutName, dOut, filter)
     filtered <- readLines(output)
     expect_equal(filtered, c(
         "#version 2.2",
@@ -387,9 +387,9 @@ test_that("Processing an rMUT MAF file", {
             "Tumor_Sample_Barcode", "UUID"), collapse="\t")
         )
     writeLines(rMutData, con=rMutName)
-    expect_true(file.exists(rMutName), info="Test setup (rMUT)")
+    expect_true(file.exists(rMutName), info="Test setup (rSNV)")
     
-    output <- .filter.unimportant_genes.processrMUT(rMutName, dOut, filter)
+    output <- .filter.unimportant_genes.processrSNV(rMutName, dOut, filter)
     filtered <- readLines(output)
     expect_equal(filtered, c(
         "#version 2.2",
@@ -407,9 +407,9 @@ test_that("Processing an rMUT MAF file", {
             "Reference_Allele", "Tumor_Seq_Allele1", "Tumor_Seq_Allele2",
             "Tumor_Sample_Barcode", "UUID"), collapse="\t"))
     writeLines(rMutData, con=rMutName)
-    expect_true(file.exists(rMutName), info="Test setup (rMUT)")
+    expect_true(file.exists(rMutName), info="Test setup (rSNV)")
     
-    expect_error(.filter.unimportant_genes.processrMUT(rMutName, dOut, filter))
+    expect_error(.filter.unimportant_genes.processrSNV(rMutName, dOut, filter))
 
     rMutName <- tempfile()
     rMutData <- c(
@@ -421,9 +421,9 @@ test_that("Processing an rMUT MAF file", {
             "A", "T", "G", "TCGA-A3-0001-124-01W-0615-10", 
             "7719241D-B6C8-4B13-80F6-3047C8BBFE1F"), collapse="\t"))
     writeLines(rMutData, con=rMutName)
-    expect_true(file.exists(rMutName), info="Test setup (rMUT)")
+    expect_true(file.exists(rMutName), info="Test setup (rSNV)")
     
-    expect_error(.filter.unimportant_genes.processrMUT(rMutName, dOut, filter))
+    expect_error(.filter.unimportant_genes.processrSNV(rMutName, dOut, filter))
 
     rMutName <- tempfile()
     rMutData <- c(
@@ -435,9 +435,9 @@ test_that("Processing an rMUT MAF file", {
             "A", "T", "G", "TCGA-A3-0001-124-01W-0615-10", 
             "7719241D-B6C8-4B13-80F6-3047C8BBFE1F"), collapse="\t"))
     writeLines(rMutData, con=rMutName)
-    expect_true(file.exists(rMutName), info="Test setup (rMUT)")
+    expect_true(file.exists(rMutName), info="Test setup (rSNV)")
     
-    expect_error(.filter.unimportant_genes.processrMUT(rMutName, dOut, filter))
+    expect_error(.filter.unimportant_genes.processrSNV(rMutName, dOut, filter))
 
 })
 
@@ -510,7 +510,7 @@ test_that("A full run of the main function", {
             "A", "T", "G", "TCGA-A3-0001-124-01W-0615-10", 
             "7719241D-B6C8-4B13-80F6-3047C8BBFE1F"), collapse="\t"))
     writeLines(rMutData, con=rMutName)
-    expect_true(file.exists(rMutName), info="Test setup (rMUT)")
+    expect_true(file.exists(rMutName), info="Test setup (rSNV)")
 
     filter.unimportant_genes(exprData, clinData, c(rMutName, rCNAName),
         dOut, rT=2, pT=0.7, cT=5, silent=TRUE, noLog=TRUE)
