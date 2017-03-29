@@ -185,7 +185,7 @@ importM.COSMIC <- function(fNameCNA,
     }
 
     # Generate and get unique barcodes
-    dataCNA$barcode <- paste("TCGA", dataCNA$ID_SAMPLE, dataCNA$ID_TUMOUR, sep = "-" )
+    dataCNA$barcode <- paste("TCGA", dataCNA$ID_SAMPLE, dataCNA$ID_TUMOUR, sep = "." )
     barcodes <- unique(dataCNA$barcode)
 
     # Get unique HGNC symbols

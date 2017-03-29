@@ -85,18 +85,18 @@ test_that("importM.COSMIC outputs correct rCNA data frame to file.", {
                             "RBMY1E",
                             "DAZ2")
 
-    colnames(expected) <- c("TCGA-683665-611825")
+    colnames(expected) <- c("TCGA.683665.611825")
 
-    expected["DAZ4", "TCGA-683665-611825"] <- 8
-    expected["FAM106A", "TCGA-683665-611825"] <- -2
-    expected["LCE3C", "TCGA-683665-611825"] <- -2
-    expected["PRY", "TCGA-683665-611825"] <- 5
-    expected["RBMY1D_ENST00000382680", "TCGA-683665-611825"] <- -2
-    expected["GYG2P1", "TCGA-683665-611825"] <- 3
-    expected["DAZ1_ENST00000382510", "TCGA-683665-611825"] <- 5
-    expected["ENSG00000196115", "TCGA-683665-611825"] <- -2
-    expected["RBMY1E", "TCGA-683665-611825"] <- -2
-    expected["DAZ2", "TCGA-683665-611825"] <- 5
+    expected["DAZ4", "TCGA.683665.611825"] <- 8
+    expected["FAM106A", "TCGA.683665.611825"] <- -2
+    expected["LCE3C", "TCGA.683665.611825"] <- -2
+    expected["PRY", "TCGA.683665.611825"] <- 5
+    expected["RBMY1D_ENST00000382680", "TCGA.683665.611825"] <- -2
+    expected["GYG2P1", "TCGA.683665.611825"] <- 3
+    expected["DAZ1_ENST00000382510", "TCGA.683665.611825"] <- 5
+    expected["ENSG00000196115", "TCGA.683665.611825"] <- -2
+    expected["RBMY1E", "TCGA.683665.611825"] <- -2
+    expected["DAZ2", "TCGA.683665.611825"] <- 5
 
     fNameCNA <- "testCosmicCNA.tsv"
     outName <- paste(testPath, testFName, sep = "")
